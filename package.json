@@ -1,7 +1,7 @@
 {
   "name": "react-wavy-audio",
   "version": "1.0.0",
-  "description": "Made with create-react-library",
+  "description": "React player library to display audio with waveform",
   "author": "kartik-budhiraja",
   "license": "MIT",
   "repository": "kartik-budhiraja/react-wavy-audio",

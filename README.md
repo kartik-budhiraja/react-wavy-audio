@@ -1,6 +1,8 @@
-# Development in progress
+*** Development in progress ***
 
 # React Wavy Audio
+
+React player library to display audio with waveform
 
 ## Install
 
@@ -11,6 +13,8 @@ npm install --save react-wavy-audio
 ## Usage
 
 Check Example Folder
+
+CodeSandbox -> https://codesandbox.io/s/react-wavy-audio-example-d6hin
 
 ## License
 
