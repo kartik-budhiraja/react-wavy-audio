@@ -2,11 +2,13 @@
 
 React player library to display audio with waveform
 
-This package uses (wavesurfer.js) [https://wavesurfer-js.org/] under the hood and provides an easier way 
+This package uses [wavesurfer.js](https://wavesurfer-js.org/) under the hood and provides an easier way 
 to use it in react applications.
 It is a wrapper for wavesurfer.js, you can use it is a reference or use it directly in your react apps.
 
 It covers basic features, but if you want something else supported, please feel free to open an issue, and contribute. 😄
+
+If you find any issues, please do let me know and we can fix it as soon as possible :)
 
 ## Install
 
@@ -17,6 +19,8 @@ npm install --save react-wavy-audio
 ## Usage
 
 Check Example Folder for a basic example
+
+Example folder deployed on Github actions -> https://kartik-budhiraja.github.io/react-wavy-audio/
 
 CodeSandbox -> https://codesandbox.io/s/react-wavy-audio-example-d6hin
 

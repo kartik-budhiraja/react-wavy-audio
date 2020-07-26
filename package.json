@@ -1,6 +1,6 @@
 {
   "name": "react-wavy-audio",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "React player library to display audio with waveform",
   "author": "kartik-budhiraja",
   "license": "MIT",
