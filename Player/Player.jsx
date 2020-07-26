@@ -4,12 +4,16 @@ import { FaPlay, FaUndo, FaRedo } from "react-icons/fa";
 import { FaPause } from "react-icons/fa";
 
 export default function Player(props) {
+
     const waveformRef = useRef();
     const trackRef = useRef();
-    const playBackSpeedOptions = [0.5, 1, 1.2, 1.5, 2];
     const [waveSurfer, setWaveSurfer] = useState(null);
+
     const [playingAudio, setPlayingAudio] = useState(false);
     const [playBackSpeed, setPlayBackSpeed] = useState(1);
+
+    const playBackSpeedOptions = props.playBackSpeedOptions ?? [0.5, 1, 1.2, 1.5, 2];
+
     const playAudio = () => {
         if (!props.hideWave) waveSurfer.play();
         else trackRef.current.play();
@@ -55,8 +59,12 @@ export default function Player(props) {
                 : wavesurfer.load(trackRef.current, props.waveJson);
             wavesurfer.on("ready", () => {
                 setWaveSurfer(wavesurfer);
+                props.getWaveSurferInstance(waveSurfer)
                 wavesurfer.zoom(props.zoom);
             });
+            Object.entries(props.events).map(([key, value]) => {
+                waveSurfer.on(key, value);
+            })
         }
     }, [
         props.audioUrl,
