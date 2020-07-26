@@ -6,8 +6,8 @@ import { FaPause } from "react-icons/fa";
 export default function Player(props) {
 
     const waveformRef = useRef();
-    const trackRef = useRef();
-    const [waveSurfer, setWaveSurfer] = useState(null);
+    const trackRef = useRef(); // Separated track playing from waveplayer to support bigger audio files
+    const [waveSurfer, setWaveSurfer] = useState(null); // Holds the reference to created wavesurfer object
 
     const [playingAudio, setPlayingAudio] = useState(false);
     const [playBackSpeed, setPlayBackSpeed] = useState(1);
@@ -15,14 +15,18 @@ export default function Player(props) {
     const playBackSpeedOptions = props.playBackSpeedOptions ?? [0.5, 1, 1.2, 1.5, 2];
 
     const playAudio = () => {
-        if (!props.hideWave) waveSurfer.play();
-        else trackRef.current.play();
+        if (!props.hideWave)
+            waveSurfer.play();
+        else
+            trackRef.current.play();
         setPlayingAudio(true);
     };
 
     const pauseAudio = () => {
-        if (!props.hideWave) waveSurfer.pause();
-        else trackRef.current.pause();
+        if (!props.hideWave)
+            waveSurfer.pause();
+        else
+            trackRef.current.pause();
         setPlayingAudio(false);
     };
 
@@ -33,11 +37,10 @@ export default function Player(props) {
     };
 
     const seekAudioFifteenSeconds = ahead => {
-        if (ahead) {
+        if (ahead)
             trackRef.current.currentTime += 15;
-        } else {
+        else
             trackRef.current.currentTime -= 15;
-        }
     };
 
     useEffect(() => {
@@ -54,17 +57,25 @@ export default function Player(props) {
                     responsive: true,
                     backend: "MediaElement"
                 });
+                // Load the waveForm json if provided
             props.waveJson
                 ? wavesurfer.load(trackRef.current)
                 : wavesurfer.load(trackRef.current, props.waveJson);
+
             wavesurfer.on("ready", () => {
                 setWaveSurfer(wavesurfer);
-                props.getWaveSurferInstance(waveSurfer)
+                // Returns the instance to call methods on
+                if (typeof props.getWaveSurferInstance === 'function') {
+                    props?.getWaveSurferInstance(waveSurfer)
+                }
                 wavesurfer.zoom(props.zoom);
             });
-            Object.entries(props.events).map(([key, value]) => {
-                waveSurfer.on(key, value);
-            })
+            
+            if (props?.events) {
+                Object.entries(props.events).map(([key, value]) => {
+                    waveSurfer.on(key, value);
+                })
+            }
         }
     }, [
         props.audioUrl,
