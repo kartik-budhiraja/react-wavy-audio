@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, Fragment } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import WaveSurfer from "wavesurfer.js";
 import { FaPlay, FaUndo, FaRedo } from "react-icons/fa";
 import { FaPause } from "react-icons/fa";
@@ -70,7 +70,7 @@ export default function Player(props) {
                 }
                 wavesurfer.zoom(props.zoom);
             });
-            
+
             if (props?.events) {
                 Object.entries(props.events).map(([key, value]) => {
                     waveSurfer.on(key, value);
