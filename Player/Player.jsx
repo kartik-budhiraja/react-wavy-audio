@@ -5,6 +5,8 @@ import { FaPause } from "react-icons/fa";
 
 export default function Player(props) {
 
+    const wrapperRef = useRef();
+
     const waveformRef = useRef();
     const trackRef = useRef(); // Separated track playing from waveplayer to support bigger audio files
     const [waveSurfer, setWaveSurfer] = useState(null); // Holds the reference to created wavesurfer object
@@ -45,18 +47,19 @@ export default function Player(props) {
 
     useEffect(() => {
         if (waveformRef.current && trackRef.current && !props.hideWave) {
+            const waveSettings = {
+                backend: "MediaElement",
+                container: wrapperRef.current.querySelector('.waveform'),
+                responsive: true
+            }
+
             const wavesurfer = props.waveStyles
                 ? WaveSurfer.create({
                     ...props.waveStyles,
-                    container: "#waveform",
-                    responsive: true,
-                    backend: "MediaElement"
+                    ...waveSettings
                 })
-                : WaveSurfer.create({
-                    container: "#waveform",
-                    responsive: true,
-                    backend: "MediaElement"
-                });
+                : WaveSurfer.create(waveSettings);
+
                 // Load the waveForm json if provided
             props.waveJson
                 ? wavesurfer.load(trackRef.current)
@@ -88,6 +91,7 @@ export default function Player(props) {
     return (
         <>
             <div
+                ref={wrapperRef}
                 style={props.containerStyles ? {
                     display: "flex",
                     flexDirection: "row", ...props.containerStyles
@@ -119,7 +123,7 @@ export default function Player(props) {
                     }}
                 >
                     <div>
-                        {!props.hideWave && <div ref={waveformRef} id="waveform" />}
+                        {!props.hideWave && <div ref={waveformRef} className="waveform" />}
                         <audio src={props.audioUrl} ref={trackRef} />
                     </div>
                     <div
