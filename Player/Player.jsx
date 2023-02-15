@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 import WaveSurfer from "wavesurfer.js";
 import { FaPlay, FaUndo, FaRedo } from "react-icons/fa";
 import { FaPause } from "react-icons/fa";
