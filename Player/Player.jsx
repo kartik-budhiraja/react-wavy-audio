@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useRef, Fragment } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 import WaveSurfer from "wavesurfer.js";
 import { FaPlay, FaUndo, FaRedo } from "react-icons/fa";
 import { FaPause } from "react-icons/fa";
 
 export default function Player(props) {
+
+    const wrapperRef = useRef();
 
     const waveformRef = useRef();
     const trackRef = useRef(); // Separated track playing from waveplayer to support bigger audio files
@@ -45,18 +47,19 @@ export default function Player(props) {
 
     useEffect(() => {
         if (waveformRef.current && trackRef.current && !props.hideWave) {
+            const waveSettings = {
+                backend: "MediaElement",
+                container: wrapperRef.current.querySelector('.waveform'),
+                responsive: true
+            }
+
             const wavesurfer = props.waveStyles
                 ? WaveSurfer.create({
                     ...props.waveStyles,
-                    container: "#waveform",
-                    responsive: true,
-                    backend: "MediaElement"
+                    ...waveSettings
                 })
-                : WaveSurfer.create({
-                    container: "#waveform",
-                    responsive: true,
-                    backend: "MediaElement"
-                });
+                : WaveSurfer.create(waveSettings);
+
                 // Load the waveForm json if provided
             props.waveJson
                 ? wavesurfer.load(trackRef.current)
@@ -70,7 +73,11 @@ export default function Player(props) {
                 }
                 wavesurfer.zoom(props.zoom);
             });
-            
+
+            wavesurfer.on("finish", () => {
+                setPlayingAudio(false);
+            });
+
             if (props?.events) {
                 Object.entries(props.events).map(([key, value]) => {
                     waveSurfer.on(key, value);
@@ -88,6 +95,7 @@ export default function Player(props) {
     return (
         <>
             <div
+                ref={wrapperRef}
                 style={props.containerStyles ? {
                     display: "flex",
                     flexDirection: "row", ...props.containerStyles
@@ -119,7 +127,7 @@ export default function Player(props) {
                     }}
                 >
                     <div>
-                        {!props.hideWave && <div ref={waveformRef} id="waveform" />}
+                        {!props.hideWave && <div ref={waveformRef} className="waveform" />}
                         <audio src={props.audioUrl} ref={trackRef} />
                     </div>
                     <div
@@ -137,12 +145,12 @@ export default function Player(props) {
                         {playingAudio ? (
                             <FaPause
                                 style={{ margin: "20px", cursor: "pointer" }}
-                                onClick={() => (playingAudio ? pauseAudio() : playAudio())}
+                                onClick={pauseAudio}
                             />
                         ) : (
                                 <FaPlay
                                     style={{ margin: "20px", cursor: "pointer" }}
-                                    onClick={() => (playingAudio ? pauseAudio() : playAudio())}
+                                    onClick={playAudio}
                                 />
                             )}
                         <span
