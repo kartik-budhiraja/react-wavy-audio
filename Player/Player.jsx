@@ -74,6 +74,10 @@ export default function Player(props) {
                 wavesurfer.zoom(props.zoom);
             });
 
+            wavesurfer.on("finish", () => {
+                setPlayingAudio(false);
+            });
+
             if (props?.events) {
                 Object.entries(props.events).map(([key, value]) => {
                     waveSurfer.on(key, value);
@@ -141,12 +145,12 @@ export default function Player(props) {
                         {playingAudio ? (
                             <FaPause
                                 style={{ margin: "20px", cursor: "pointer" }}
-                                onClick={() => (playingAudio ? pauseAudio() : playAudio())}
+                                onClick={pauseAudio}
                             />
                         ) : (
                                 <FaPlay
                                     style={{ margin: "20px", cursor: "pointer" }}
-                                    onClick={() => (playingAudio ? pauseAudio() : playAudio())}
+                                    onClick={playAudio}
                                 />
                             )}
                         <span
